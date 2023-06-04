@@ -6,13 +6,15 @@ from aiogram.types import Message
 from aiogram.enums import ContentType
 from aiogram.filters import Command
 from core.config import settings
-from core.handlers.basic import get_start, get_photo, get_hello
+from core.handlers.basic import get_start, get_photo, get_hello, get_location
 from core.filters.is_contact import IsTrueContact
 from core.handlers.contact import get_true_contact, get_fake_contact
+from core.utils.commands import set_commands
 
 
 
 async def start_bot(bot: Bot):
+    await set_commands(bot)
     for admin_id in settings.bots.admin_ids:
         await bot.send_message(admin_id, text='Бот запущен!')
 
@@ -31,6 +33,7 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+    dp.message.register(get_location, F.content_type==ContentType.LOCATION)
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_hello, F.text.lower().startswith('привет'))
     dp.message.register(get_true_contact, F.content_type==ContentType.CONTACT, IsTrueContact())
