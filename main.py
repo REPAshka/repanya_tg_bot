@@ -1,11 +1,14 @@
 import json
 import asyncio
 import logging
-from core.handlers.basic import get_start, get_photo, get_hello
 from aiogram import Bot, Dispatcher, F
 from aiogram.types import Message
-from core.config import settings
+from aiogram.enums import ContentType
 from aiogram.filters import Command
+from core.config import settings
+from core.handlers.basic import get_start, get_photo, get_hello
+from core.filters.is_contact import IsTrueContact
+from core.handlers.contact import get_true_contact, get_fake_contact
 
 
 
@@ -30,7 +33,8 @@ async def start():
     dp.shutdown.register(stop_bot)
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_hello, F.text.lower().startswith('привет'))
-    
+    dp.message.register(get_true_contact, F.content_type==ContentType.CONTACT, IsTrueContact())
+    dp.message.register(get_fake_contact, F.content_type==ContentType.CONTACT)
     dp.message.register(get_start, Command(commands=['start', 'run']))
     try:
         await dp.start_polling(bot)
