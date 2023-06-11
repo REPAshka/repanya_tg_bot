@@ -6,10 +6,12 @@ from aiogram.types import Message
 from aiogram.enums import ContentType
 from aiogram.filters import Command
 from core.config import settings
-from core.handlers.basic import get_start, get_photo, get_hello, get_location
 from core.filters.is_contact import IsTrueContact
-from core.handlers.contact import get_true_contact, get_fake_contact
 from core.utils.commands import set_commands
+from core.utils.callback_data import MacInfo
+from core.handlers.basic import get_start, get_photo, get_hello, get_location, get_inline
+from core.handlers.contact import get_true_contact, get_fake_contact
+from core.handlers.callback import select_macbook
 
 
 
@@ -33,6 +35,8 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+    dp.message.register(get_inline, Command(commands='inline'))
+    dp.callback_query.register(select_macbook, MacInfo.filter())
     dp.message.register(get_location, F.content_type==ContentType.LOCATION)
     dp.message.register(get_photo, F.photo)
     dp.message.register(get_hello, F.text.lower().startswith('привет'))

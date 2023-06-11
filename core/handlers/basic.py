@@ -1,6 +1,11 @@
 from aiogram import Bot
 from aiogram.types import Message
 from core.keyboards.reply import get_reply_keyboard
+from core.keyboards.inline import get_inline_keyboard #, select_macbook
+
+
+async def get_inline(message: Message, bot: Bot):
+    await message.answer(f'Привет, {message.from_user.first_name}. Показываю инлайн кнопки', reply_markup=get_inline_keyboard())
 
 
 async def get_start(message: Message, bot: Bot):

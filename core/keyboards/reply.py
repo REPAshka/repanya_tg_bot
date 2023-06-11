@@ -65,4 +65,5 @@ def get_reply_keyboard():
     keyboard_builder.adjust(3,2,1)
     return keyboard_builder.as_markup(resize_keyboard=True, one_time_keyboard=True,
                                     input_field_placeholder='Отправь геолокацию, номер телефона или создай викторину/опрос')
-# get_reply_keyboard = loc_tel_poll_keyboard - одиноковое создают
+
+# get_reply_keyboard == loc_tel_poll_keyboard - одиноковое создают
