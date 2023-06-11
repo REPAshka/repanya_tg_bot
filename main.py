@@ -12,6 +12,7 @@ from core.utils.callback_data import MacInfo
 from core.handlers.basic import get_start, get_photo, get_hello, get_location, get_inline
 from core.handlers.contact import get_true_contact, get_fake_contact
 from core.handlers.callback import select_macbook
+from core.handlers.pay import order, pre_checkout_query, successful_payment
 
 
 
@@ -35,6 +36,9 @@ async def start():
     dp = Dispatcher()
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)
+    dp.message.register(order, Command(commands='pay'))
+    dp.pre_checkout_query.register(pre_checkout_query)
+    dp.message.register(successful_payment, F.content_type==ContentType.SUCCESSFUL_PAYMENT)
     dp.message.register(get_inline, Command(commands='inline'))
     dp.callback_query.register(select_macbook, MacInfo.filter())
     dp.message.register(get_location, F.content_type==ContentType.LOCATION)
